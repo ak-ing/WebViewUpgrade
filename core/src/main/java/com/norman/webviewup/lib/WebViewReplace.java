@@ -13,6 +13,8 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.webkit.WebView;
 
+import com.norman.webviewup.lib.api35.AMSHookHelper;
+import com.norman.webviewup.lib.api35.PluginDexMergeManager;
 import com.norman.webviewup.lib.hook.PackageManagerServiceHook;
 import com.norman.webviewup.lib.hook.WebViewUpdateServiceHook;
 import com.norman.webviewup.lib.reflect.RuntimeAccess;
@@ -62,6 +64,15 @@ public class WebViewReplace {
                     throw new WebViewReplaceException("current system version " + sdkVersion + " is smaller than the minimum version " + applicationInfo.minSdkVersion + " required by the apk  " + apkPath);
                 }
             }
+            File file = new File(apkPath);
+            if(file.exists()){
+                file.setReadOnly();
+            }
+
+            PluginDexMergeManager.loadPluginDex(context, apkPath);
+            AMSHookHelper.hookAMN(context);
+            AMSHookHelper.hookActivityThread();
+
             managerHook = new PackageManagerServiceHook(context, packageInfo.packageName, apkPath,libsPath);
 
             updateServiceHook = new WebViewUpdateServiceHook(context, packageInfo.packageName);
@@ -69,10 +80,6 @@ public class WebViewReplace {
             updateServiceHook.hook();
             if (SYSTEM_WEB_VIEW_PACKAGE_INFO == null) {
                 SYSTEM_WEB_VIEW_PACKAGE_INFO = loadCurrentWebViewPackageInfo();
-            }
-            File file = new File(apkPath);
-            if(file.exists()){
-                file.setReadOnly();
             }
 
             // 测试检查
@@ -82,7 +89,7 @@ public class WebViewReplace {
             REPLACE_WEB_VIEW_PACKAGE_INFO = loadCurrentWebViewPackageInfo();
         } catch (Throwable throwable) {
             if (throwable instanceof WebViewReplaceException) {
-                throw throwable;
+                throw (WebViewReplaceException) throwable;
             } else {
                 String message = throwable.getMessage();
                 if (TextUtils.isEmpty(message)) {

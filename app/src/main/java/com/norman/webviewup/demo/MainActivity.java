@@ -101,7 +101,12 @@ public class MainActivity extends Activity implements UpgradeCallback {
                         "com.android.webview",
                         "109.0.5414.123",
                         "",
-                        "安装包")
+                        "安装包") ,
+                new UpgradeInfo(
+                        "com.android.webview",
+                        "109.0.5414.123",
+                        "Android System WebView2.apk",
+                        "内置")
         ));
 
         UPGRADE_PACKAGE_MAP.put("x86", Arrays.asList(
@@ -131,6 +136,12 @@ public class MainActivity extends Activity implements UpgradeCallback {
                         "com.android.webview",
                         "109.5.5414.123",
                         "webview-x86.apk",
+                        "内置")
+                ,
+                new UpgradeInfo(
+                        "com.google.android.webview",
+                        "124.0.6367.179",
+                        "com.google.android.webview_124.0.6367.179-636717907_minAPI26_maxAPI28(x86,x86_64)(nodpi)_apkmirror.com.apk",
                         "内置")
         ));
 

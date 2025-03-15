@@ -1,4 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
+    <application
+        android:appComponentFactory="com.norman.webviewup.lib.api35.SandboxAppComponentFactory"
+        tools:replace="android:appComponentFactory"
+        tools:targetApi="p">
+        <service
+            android:name="com.norman.webviewup.lib.api35.StubService"
+            android:enabled="true"
+            android:exported="true"
+            android:externalService="true"
+            android:isolatedProcess="true" />
+    </application>
 </manifest>

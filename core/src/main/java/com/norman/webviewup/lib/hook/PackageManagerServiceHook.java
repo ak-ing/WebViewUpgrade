@@ -19,24 +19,20 @@ import androidx.annotation.NonNull;
 
 import com.norman.webviewup.lib.reflect.RuntimeAccess;
 import com.norman.webviewup.lib.service.binder.BinderHook;
+import com.norman.webviewup.lib.service.binder.ProxyBinder;
 import com.norman.webviewup.lib.service.interfaces.IActivityThread;
 import com.norman.webviewup.lib.service.interfaces.IApplicationInfo;
 import com.norman.webviewup.lib.service.interfaces.IContextImpl;
 import com.norman.webviewup.lib.service.interfaces.IPackageManager;
 import com.norman.webviewup.lib.service.interfaces.IServiceManager;
-import com.norman.webviewup.lib.service.binder.ProxyBinder;
 import com.norman.webviewup.lib.service.proxy.PackageManagerProxy;
 import com.norman.webviewup.lib.util.FileUtils;
 import com.norman.webviewup.lib.util.ProcessUtils;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Enumeration;
 import java.util.Map;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 
 public class PackageManagerServiceHook extends BinderHook {
 
@@ -74,20 +70,21 @@ public class PackageManagerServiceHook extends BinderHook {
         @Override
         protected ServiceInfo getServiceInfo(ComponentName componentName, long flags, int userId) {
             Log.i(TAG, "【getServiceInfo】");
-            if (!TextUtils.equals(webViewPackageName, componentName.getPackageName())) {
-                return (ServiceInfo) invoke();
-            }
-            Log.i(TAG, "getServiceInfo: " + componentName.getClassName());
-            if (!SANDBOXED_SERVICES_NAME.equals(componentName.getClassName())) {
-                return (ServiceInfo) invoke();
-            }
-            // Skip the sandboxed service check, 返回任意已存在的ServiceInfo跳过检查
-            PackageInfo packageInfo = getPackageInfo(componentName.getPackageName(), PackageManager.GET_SERVICES);
-            if (packageInfo != null && packageInfo.services != null) {
-                ServiceInfo serviceInfo = packageInfo.services[0];
-                Log.i(TAG, "Skip the sandboxed service check, fake: " + serviceInfo.name);
-                return serviceInfo;
-            }
+            // 此方案已不需要
+//            if (!TextUtils.equals(webViewPackageName, componentName.getPackageName())) {
+//                return (ServiceInfo) invoke();
+//            }
+//            Log.i(TAG, "getServiceInfo: " + componentName.getClassName());
+//            if (!SANDBOXED_SERVICES_NAME.equals(componentName.getClassName())) {
+//                return (ServiceInfo) invoke();
+//            }
+//            // Skip the sandboxed service check, 返回任意已存在的ServiceInfo跳过检查
+//            PackageInfo packageInfo = getPackageInfo(componentName.getPackageName(), PackageManager.GET_SERVICES);
+//            if (packageInfo != null && packageInfo.services != null) {
+//                ServiceInfo serviceInfo = packageInfo.services[0];
+//                Log.i(TAG, "Skip the sandboxed service check, fake: " + serviceInfo.name);
+//                return serviceInfo;
+//            }
             return (ServiceInfo) invoke();
         }
 
